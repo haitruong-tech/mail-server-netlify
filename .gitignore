@@ -1,0 +1,5 @@
+# Local Netlify folder
+.netlify
+.env
+portfolio-db.json
+node_modules
