@@ -28,7 +28,7 @@ async function addContact({ name, email, content, ip }, auth, position) {
 }
 
 const headers = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": "https://haitruongdev.com/",
   "Access-Control-Allow-Headers": "Content-Type",
   "Access-Control-Allow-Methods": "GET, OPTIONS, POST",
 };
@@ -71,7 +71,7 @@ export const handler = async (event, context) => {
       auth,
       (response.data.values?.length ?? 0) + 1
     );
-    // sendMail({ ...contact });
+    sendMail({ ...contact });
     console.log("Finish");
 
     return {
