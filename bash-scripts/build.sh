@@ -10,6 +10,21 @@ if [ -f $path ]; then
   rm $path
 fi
 
+echo $path
+echo "{"
+echo "  \"type\": \"${TYPE}\","
+echo "  \"project_id\": \"${PROJECT_ID}\","
+echo "  \"private_key_id\": \"${PRIVATE_KEY_ID}\","
+echo "  \"private_key\": \"${PRIVATE_KEY}\","
+echo "  \"client_email\": \"${CLIENT_EMAIL}\","
+echo "  \"client_id\": \"${CLIENT_ID}\","
+echo "  \"auth_uri\": \"${AUTH_URI}\","
+echo "  \"token_uri\": \"${TOKEN_URI}\","
+echo "  \"auth_provider_x509_cert_url\": \"${AUTH_PROVIDER_X509_CERT_URL}\","
+echo "  \"client_x509_cert_url\": \"${CLIENT_X509_CERT_URL}\","
+echo "  \"universe_domain\": \"${UNIVERSE_DOMAIN}\""
+echo "}"
+
 echo "{" >>$path
 echo "  \"type\": \"${TYPE}\"," >>$path
 echo "  \"project_id\": \"${PROJECT_ID}\"," >>$path
