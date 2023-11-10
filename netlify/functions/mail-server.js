@@ -33,7 +33,6 @@ const headers = {
 };
 
 export const handler = async (event, context) => {
-  return { statusCode: 200, body: JSON.stringify(__dirname) };
   try {
     const ip = event.headers["client-ip"];
     const auth = await getAuthToken();
