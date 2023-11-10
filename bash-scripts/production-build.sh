@@ -4,7 +4,7 @@ set -o allexport
 source ../.env
 set +o allexport
 
-path=/var/task/netlify/functions/portfolio-db.json
+path=../netlify/functions/portfolio-db.json
 
 if [ -f $path ]; then
   rm $path
