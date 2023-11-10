@@ -11,21 +11,14 @@ import { sendMail } from "../../services/mail";
 const spreadsheetId = process.env.SPREAD_SHEET_ID;
 const sheetName = process.env.SHEET_NAME;
 
-async function addContact({ name, email, content, ip }, position) {
+async function addContact({ name, email, content }, auth, position) {
   try {
-    const auth = await getAuthToken();
-    const response = await getSpreadSheetValues({
-      spreadsheetId,
-      sheetName,
-      auth,
-    });
-    const row = (response?.data?.values?.length ?? 0) + 1;
     const updateResponse = await addRow({
       auth,
-      range: `${sheetName}!A${row}:F${row}`,
+      range: `${sheetName}!A${position}:F${position}`,
       spreadsheetId,
-      // id, name, email, content, created_at, ip
-      values: [[uuidv4(), name, email, content, new Date().toISOString(), ip]],
+      // id, name, email, content, created_at
+      values: [[uuidv4(), name, email, content, new Date().toISOString()]],
     });
     return updateResponse.status;
   } catch (error) {
@@ -34,7 +27,7 @@ async function addContact({ name, email, content, ip }, position) {
 }
 
 const headers = {
-  "Access-Control-Allow-Origin": "http://localhost:3000",
+  "Access-Control-Allow-Origin": "https://haitruongdev.com/",
   "Access-Control-Allow-Headers": "Content-Type",
   "Access-Control-Allow-Methods": "POST",
 };
@@ -63,8 +56,7 @@ export const handler = async (event, context) => {
     }
 
     const contact = JSON.parse(event.body);
-    const ip = event.headers["client-ip"];
-    addContact({ ...contact, ip });
+    addContact({ ...contact }, auth, (response.data.values?.length ?? 0) + 1);
     sendMail({ ...contact });
 
     return {
