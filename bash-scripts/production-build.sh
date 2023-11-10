@@ -1,16 +1,9 @@
 #!/bin/bash
-
-set -o allexport
-source ../.env
-set +o allexport
-
-path=netlify/functions/portfolio-db.json
+path=portfolio-db.json
 
 if [ -f $path ]; then
   rm $path
 fi
-
-echo $path
 
 echo "{" >>$path
 echo "  \"type\": \"${TYPE}\"," >>$path

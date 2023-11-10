@@ -10,8 +10,6 @@ if [ -f $path ]; then
   rm $path
 fi
 
-echo $path
-
 echo "{" >>$path
 echo "  \"type\": \"${TYPE}\"," >>$path
 echo "  \"project_id\": \"${PROJECT_ID}\"," >>$path
