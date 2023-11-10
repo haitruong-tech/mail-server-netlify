@@ -28,7 +28,7 @@ async function addContact({ name, email, content, ip }, auth, position) {
 }
 
 const headers = {
-  "Access-Control-Allow-Origin": "https://haitruongdev.com/",
+  "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Content-Type",
   "Access-Control-Allow-Methods": "GET, OPTIONS, POST",
 };
@@ -66,12 +66,14 @@ export const handler = async (event, context) => {
     console.log(event.body);
     const contact = JSON.parse(event.body);
 
-    await addContact(
-      { ...contact, ip },
-      auth,
-      (response.data.values?.length ?? 0) + 1
-    );
-    sendMail({ ...contact });
+    await Promise.all([
+      addContact(
+        { ...contact, ip },
+        auth,
+        (response.data.values?.length ?? 0) + 1
+      ),
+      sendMail({ ...contact }),
+    ]);
     console.log("Finish");
 
     return {
