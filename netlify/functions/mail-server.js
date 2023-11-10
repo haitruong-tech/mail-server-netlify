@@ -8,8 +8,6 @@ import {
 } from "../../services/sheet";
 import { sendMail } from "../../services/mail";
 
-console.log(__dirname);
-
 const spreadsheetId = process.env.SPREAD_SHEET_ID;
 const sheetName = process.env.SHEET_NAME;
 
@@ -35,6 +33,7 @@ const headers = {
 };
 
 export const handler = async (event, context) => {
+  return { statusCode: 200, body: JSON.stringify(__dirname) };
   try {
     const ip = event.headers["client-ip"];
     const auth = await getAuthToken();
