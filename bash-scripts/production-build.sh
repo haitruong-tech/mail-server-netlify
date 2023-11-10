@@ -4,7 +4,9 @@ set -o allexport
 source ../.env
 set +o allexport
 
-echo [pwd]
+echo `pwd`
+echo `ls ..`
+echo `ls`
 
 # path=../netlify/functions/portfolio-db.json
 
