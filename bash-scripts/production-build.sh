@@ -1,4 +1,11 @@
 #!/bin/bash
+env=../.env
+if [ -f $env ]; then
+  set -o allexport
+  source ../.env
+  set +o allexport
+fi
+
 path=portfolio-db.json
 
 if [ -f $path ]; then

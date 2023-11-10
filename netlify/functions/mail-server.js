@@ -7,6 +7,7 @@ import {
   getSpreadSheetValues,
 } from "../../services/sheet";
 import { sendMail } from "../../services/mail";
+import fs from "fs";
 
 const spreadsheetId = process.env.SPREAD_SHEET_ID;
 const sheetName = process.env.SHEET_NAME;
@@ -27,13 +28,17 @@ async function addContact({ name, email, content, ip }, auth, position) {
 }
 
 const headers = {
-  "Access-Control-Allow-Origin": "https://haitruongdev.com/",
+  "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Content-Type",
-  "Access-Control-Allow-Methods": "POST",
+  "Access-Control-Allow-Methods": "GET, OPTIONS, POST",
 };
 
 export const handler = async (event, context) => {
   try {
+    console.log({ event });
+    console.log({ body: event.body });
+    console.log("Handler");
+    console.log(fs.readFileSync("portfolio-db.json", { encoding: "utf-8" }));
     const ip = event.headers["client-ip"];
     const auth = await getAuthToken();
     const response = await getSpreadSheetValues({
@@ -49,6 +54,7 @@ export const handler = async (event, context) => {
       (mail) => new Date(mail[4]).getTime() > date.getTime() && mail[5] === ip
     );
     if (mails.length >= 5) {
+      console.log("Early return");
       return {
         headers,
         statusCode: 200,
@@ -56,13 +62,17 @@ export const handler = async (event, context) => {
       };
     }
 
+    console.log("Add Contact");
+    console.log(event.body);
     const contact = JSON.parse(event.body);
-    addContact(
+
+    await addContact(
       { ...contact, ip },
       auth,
       (response.data.values?.length ?? 0) + 1
     );
-    sendMail({ ...contact });
+    // sendMail({ ...contact });
+    console.log("Finish");
 
     return {
       headers,
