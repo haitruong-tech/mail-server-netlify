@@ -7,21 +7,5 @@
   </head>
   <body>
     UwU
-    <script>
-      window.addEventListener("load", () => {
-        const init = async () => {
-          const data = await fetch("/.netlify/functions/mail-server", {
-            method: "POST",
-            body: JSON.stringify({
-              name: "John Doe",
-              email: "john@gmail.com",
-              content: "I want to work with you",
-            }),
-          }).then((res) => res.json());
-          console.log(data);
-        };
-        init();
-      });
-    </script>
   </body>
 </html>
