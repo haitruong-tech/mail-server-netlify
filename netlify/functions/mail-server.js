@@ -7,7 +7,6 @@ import {
   getSpreadSheetValues,
 } from "../../services/sheet";
 import { sendMail } from "../../services/mail";
-import fs from "fs";
 
 const spreadsheetId = process.env.SPREAD_SHEET_ID;
 const sheetName = process.env.SHEET_NAME;
@@ -35,10 +34,13 @@ const headers = {
 
 export const handler = async (event, context) => {
   try {
-    console.log({ event });
-    console.log({ body: event.body });
-    console.log("Handler");
-    console.log(fs.readFileSync("portfolio-db.json", { encoding: "utf-8" }));
+    if (event.headers.origin !== "https://haitruongdev.com") {
+      return {
+        headers,
+        statusCode: 405,
+        body: JSON.stringify("Not allowed"),
+      };
+    }
     const ip = event.headers["client-ip"];
     const auth = await getAuthToken();
     const response = await getSpreadSheetValues({
@@ -54,7 +56,6 @@ export const handler = async (event, context) => {
       (mail) => new Date(mail[4]).getTime() > date.getTime() && mail[5] === ip
     );
     if (mails.length >= 5) {
-      console.log("Early return");
       return {
         headers,
         statusCode: 200,
@@ -62,8 +63,6 @@ export const handler = async (event, context) => {
       };
     }
 
-    console.log("Add Contact");
-    console.log(event.body);
     const contact = JSON.parse(event.body);
 
     await Promise.all([
@@ -74,7 +73,6 @@ export const handler = async (event, context) => {
       ),
       sendMail({ ...contact }),
     ]);
-    console.log("Finish");
 
     return {
       headers,
